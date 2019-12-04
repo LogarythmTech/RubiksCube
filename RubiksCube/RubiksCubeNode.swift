@@ -33,8 +33,6 @@ enum Color {
 			m.diffuse.contents = UIColor.orange
 		case .purple:
 			m.diffuse.contents = UIColor.purple
-		default:
-			break
 		}
 		
 		m.locksAmbientWithDiffuse = true
@@ -49,18 +47,38 @@ class RubiksCubeNode: SCNNode {
 	let sideColors: [Color]
 	let insideColor: Color
 	
+	let deg90: CGFloat = 3.1415926536/2
+	
+	var front: [[Color]] = [[.red, .red, .red],
+							[.red, .red, .red],
+							[.red, .red, .red]]
+	var back: [[Color]] = [[.blue, .blue, .blue],
+						   [.blue, .blue, .blue],
+						   [.blue, .blue, .blue]]
+	var top: [[Color]] = [[.orange, .orange, .orange],
+						  [.orange, .orange, .orange],
+						  [.orange, .orange, .orange]]
+	var bottom: [[Color]] = [[.white, .white, .white],
+							 [.white, .white, .white],
+							 [.white, .white, .white]]
+	var left: [[Color]] = [[.yellow, .yellow, .yellow],
+						   [.yellow, .yellow, .yellow],
+						   [.yellow, .yellow, .yellow]]
+	var right: [[Color]] = [[.green, .green, .green],
+							[.green, .green, .green],
+							[.green, .green, .green]]
+	
 	init(size: Int) {
 		self.size = size
 		self.insideColor = Color.black
 		self.sideColors = [Color.red, Color.green, Color.blue, Color.yellow, Color.orange, Color.white]
 		self.boxs = [SCNNode](repeating: SCNNode(), count: size * size * size)
-		
-		print(self.boxs.count)
-		
+				
 		super.init()
 		
 		for i in 0..<boxs.count {
 			self.boxs[i] = SCNNode()
+			let child: SCNNode = SCNNode()
 			
 			let box = SCNBox(width: 0.98, height: 0.98, length: 0.98, chamferRadius: 0.1)
 			var mat: [SCNMaterial] = [sideColors[0].mat, sideColors[1].mat, sideColors[2].mat, sideColors[3].mat, sideColors[4].mat, sideColors[5].mat]
@@ -97,14 +115,32 @@ class RubiksCubeNode: SCNNode {
 			
 			box.materials = mat
 			
-			self.boxs[i].geometry = box
-			
-			self.boxs[i].worldPosition.x = Float(row)
-			self.boxs[i].worldPosition.y = Float(col)
-			self.boxs[i].worldPosition.z = Float(height)
+			child.geometry = box
+			self.boxs[i].addChildNode(child)
+			child.worldPosition.x = Float(row) - Float(size)/2.0 + 0.5
+			child.worldPosition.y = Float(col) - Float(size)/2.0 + 0.5
+			child.worldPosition.z = Float(height) - Float(size)/2.0 + 0.5
 			
 			self.addChildNode(self.boxs[i])
 		}
+		
+		rotateBrick()
+	}
+	
+	
+	func rotateBrick() {
+		for i in 0..<boxs.count {
+			let row = i % size
+			let col = (i / size) % size
+			let height = i / (size * size)
+			
+			if(row == 0) {
+				let action = SCNAction.rotateBy(x: deg90, y: 0, z: 0, duration: 1)
+				self.boxs[i].runAction(action)
+			}
+		}
+		
+		
 	}
 	
 	required init?(coder: NSCoder) {

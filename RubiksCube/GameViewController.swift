@@ -22,7 +22,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        cameraNode.position = SCNVector3(x: 0, y: 0, z: 25)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -39,7 +39,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(ambientLightNode)
 		
 		//MARK: - Create Brick
-		let testBlock = RubiksCubeNode(size: 10)
+		let testBlock = RubiksCubeNode(size: 3)
 		scene.rootNode.addChildNode(testBlock)
         
         
