@@ -149,7 +149,6 @@ class RubiksCubeNode: SCNNode {
 			let col = (i / size) % size
 			let height = i / (size * size)
 			
-			/*
 			//Change insides to black
 			if(height != size - 1) {
 				mat[0] = insideColor.mat
@@ -173,7 +172,7 @@ class RubiksCubeNode: SCNNode {
 			
 			if(col != 0) {
 				mat[5] = insideColor.mat
-			}*/
+			}
 			
 			box.materials = mat
 			
@@ -190,8 +189,6 @@ class RubiksCubeNode: SCNNode {
 	
 	func rotateBrick() {
 		rotateY()
-		rotateX()
-		rotateZ()
 	}
 		
 	func rotateX() {
