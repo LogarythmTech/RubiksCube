@@ -113,6 +113,8 @@ class RubiksCubeNode: SCNNode {
 	
 	let deg90: CGFloat = 3.1415926536/2
 	
+	let rotationDuration: CGFloat = 1
+	
 	init(size: Int) {
 		self.size = size
 		self.insideColor = Color.black
@@ -196,7 +198,7 @@ class RubiksCubeNode: SCNNode {
 			let row = i % size
 			
 			if(row == 0) {
-				let action = SCNAction.rotateBy(x: deg90, y: 0, z: 0, duration: 1)
+				let action = SCNAction.rotateBy(x: deg90, y: 0, z: 0, duration: TimeInterval(rotationDuration))
 				self.boxs[i].runAction(action, completionHandler: {
 					self.boxMats[i].rotateX(pos: true)
 					self.resetBrick()
@@ -210,7 +212,7 @@ class RubiksCubeNode: SCNNode {
 			let col = (i / size) % size
 			
 			if(col == 0) {
-				let action = SCNAction.rotateBy(x: 0, y: deg90, z: 0, duration: 1)
+				let action = SCNAction.rotateBy(x: 0, y: deg90, z: 0, duration: TimeInterval(rotationDuration))
 				self.boxs[i].runAction(action, completionHandler: {
 					self.boxMats[i].rotateY(pos: true)
 					self.resetBrick()
@@ -224,7 +226,7 @@ class RubiksCubeNode: SCNNode {
 			let height = i / (size * size)
 			
 			if(height == 0) {
-				let action = SCNAction.rotateBy(x: 0, y: 0, z: deg90, duration: 1)
+				let action = SCNAction.rotateBy(x: 0, y: 0, z: deg90, duration: TimeInterval(rotationDuration))
 				self.boxs[i].runAction(action, completionHandler: {
 					self.boxMats[i].rotateZ(pos: true)
 					self.resetBrick()
