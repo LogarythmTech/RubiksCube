@@ -190,46 +190,51 @@ class RubiksCubeNode: SCNNode {
 	}
 	
 	func rotateBrick() {
-		rotateY()
+		rotateY(pos: false) {
+			//Nothing
+		}
 	}
 		
-	func rotateX() {
+	func rotateX(pos: Bool, onCompletion: (() -> Void)) {
 		for i in 0..<boxs.count {
 			let row = i % size
 			
 			if(row == 0) {
-				let action = SCNAction.rotateBy(x: deg90, y: 0, z: 0, duration: TimeInterval(rotationDuration))
+				let action = SCNAction.rotateBy(x: deg90 * (pos ? 1 : -1), y: 0, z: 0, duration: TimeInterval(rotationDuration))
 				self.boxs[i].runAction(action, completionHandler: {
-					self.boxMats[i].rotateX(pos: true)
+					self.boxMats[i].rotateX(pos: pos)
 					self.resetBrick()
+					//onCompletion()
 				})
 			}
 		}
 	}
 	
-	func rotateY() {
+	func rotateY(pos: Bool, onCompletion: (()->Void)) {
 		for i in 0..<boxs.count {
 			let col = (i / size) % size
 			
 			if(col == 0) {
-				let action = SCNAction.rotateBy(x: 0, y: deg90, z: 0, duration: TimeInterval(rotationDuration))
+				let action = SCNAction.rotateBy(x: 0, y: deg90 * (pos ? 1 : -1), z: 0, duration: TimeInterval(rotationDuration))
 				self.boxs[i].runAction(action, completionHandler: {
-					self.boxMats[i].rotateY(pos: true)
+					self.boxMats[i].rotateY(pos: pos)
 					self.resetBrick()
+					//onCompletion()
 				})
 			}
 		}
 	}
 
-	func rotateZ() {
+	func rotateZ(pos: Bool, onCompletion: (()->Void)) {
 		for i in 0..<boxs.count {
 			let height = i / (size * size)
 			
 			if(height == 0) {
-				let action = SCNAction.rotateBy(x: 0, y: 0, z: deg90, duration: TimeInterval(rotationDuration))
+				let action = SCNAction.rotateBy(x: 0, y: 0, z: deg90 * (pos ? 1 : -1), duration: TimeInterval(rotationDuration))
 				self.boxs[i].runAction(action, completionHandler: {
-					self.boxMats[i].rotateZ(pos: true)
+					self.boxMats[i].rotateZ(pos: pos)
 					self.resetBrick()
+					//onCompletion()
 				})
 			}
 		}
