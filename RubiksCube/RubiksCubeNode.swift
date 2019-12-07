@@ -37,7 +37,7 @@ enum Color {
 		
 		m.locksAmbientWithDiffuse = true
 		return m
-    }
+	}
 }
 
 struct Material {
@@ -83,7 +83,7 @@ struct Material {
 			self.mats[3] = temp[0]
 		}
 	}
-
+	
 	mutating func rotateZ(pos: Bool) {
 		let temp: [Color] = self.mats
 		
@@ -113,7 +113,8 @@ class RubiksCubeNode: SCNNode {
 	
 	let deg90: CGFloat = 3.1415926536/2
 	
-	let rotationDuration: CGFloat = 1
+	let rotationDuration: Double = 1
+	let waitDuration: Double = 0.1
 	
 	init(size: Int) {
 		self.size = size
@@ -190,9 +191,13 @@ class RubiksCubeNode: SCNNode {
 	}
 	
 	func rotateBrick() {
-		rotateX(pos: false, line: 0) //TODO: Run Code on completion
-	}
+		rotateZ(pos: false, line: 0)
 		
+		runAction(SCNAction.wait(duration: rotationDuration + waitDuration), completionHandler: {
+			self.rotateBrick()
+		})
+	}
+	
 	func rotateX(pos: Bool, line: Int) {
 		for i in 0..<boxs.count {
 			let row = i % size
@@ -202,7 +207,6 @@ class RubiksCubeNode: SCNNode {
 				self.boxs[i].runAction(action, completionHandler: {
 					self.boxMats[i].rotateX(pos: pos)
 					self.resetBrick()
-					//onCompletion()
 				})
 			}
 		}
@@ -217,12 +221,11 @@ class RubiksCubeNode: SCNNode {
 				self.boxs[i].runAction(action, completionHandler: {
 					self.boxMats[i].rotateY(pos: pos)
 					self.resetBrick()
-					//onCompletion()
 				})
 			}
 		}
 	}
-
+	
 	func rotateZ(pos: Bool, line: Int) {
 		for i in 0..<boxs.count {
 			let height = i / (size * size)
@@ -232,7 +235,6 @@ class RubiksCubeNode: SCNNode {
 				self.boxs[i].runAction(action, completionHandler: {
 					self.boxMats[i].rotateZ(pos: pos)
 					self.resetBrick()
-					//onCompletion()
 				})
 			}
 		}
@@ -242,5 +244,5 @@ class RubiksCubeNode: SCNNode {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-
+	
 }
