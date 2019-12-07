@@ -239,7 +239,6 @@ class RubiksCubeNode: SCNNode {
 	
 	//This takes in an int [index] and return what index will replace it with
 	private func rotateXto(pos: Bool, index: Int) -> Int {
-		print("x")
 		let x = getX(index) //Stays the same always
 		let y = pos ? (self.size - getY(index) - 1) : getY(index)
 		let z = pos ? getZ(index) : (self.size - getZ(index) - 1)
@@ -261,7 +260,6 @@ class RubiksCubeNode: SCNNode {
 	
 	//This takes in an int [index] and return what index will replace it with
 	private func rotateYto(pos: Bool, index: Int) -> Int {
-		print("y")
 		let x = pos ? getX(index) : (self.size - getX(index) - 1)
 		let y = getY(index) //Stays the same always
 		let z = pos ? (self.size - getZ(index) - 1) : getZ(index)
@@ -283,7 +281,6 @@ class RubiksCubeNode: SCNNode {
 	
 	//This takes in an int [index] and return what index will replace it with
 	private func rotateZto(pos: Bool, index: Int) -> Int {
-		print("z")
 		let x = pos ? (self.size - getX(index) - 1) : getX(index)
 		let y = pos ? getY(index) : (self.size - getY(index) - 1)
 		let z = getZ(index) //Stays the same always
