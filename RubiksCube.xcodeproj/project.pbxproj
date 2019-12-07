@@ -14,7 +14,6 @@
 		D13081212397616500732E2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D13081202397616500732E2B /* Assets.xcassets */; };
 		D13081242397616500732E2B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D13081222397616500732E2B /* LaunchScreen.storyboard */; };
 		D18A20F9239762A300760284 /* RubiksCubeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18A20F8239762A300760284 /* RubiksCubeNode.swift */; };
-		D18A20FB2398334E00760284 /* RubiksCube.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18A20FA2398334E00760284 /* RubiksCube.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +26,6 @@
 		D13081232397616500732E2B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D13081252397616500732E2B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D18A20F8239762A300760284 /* RubiksCubeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RubiksCubeNode.swift; sourceTree = "<group>"; };
-		D18A20FA2398334E00760284 /* RubiksCube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RubiksCube.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +62,6 @@
 				D13081192397616500732E2B /* art.scnassets */,
 				D130811B2397616500732E2B /* GameViewController.swift */,
 				D18A20F8239762A300760284 /* RubiksCubeNode.swift */,
-				D18A20FA2398334E00760284 /* RubiksCube.swift */,
 				D130811D2397616500732E2B /* Main.storyboard */,
 				D13081202397616500732E2B /* Assets.xcassets */,
 				D13081222397616500732E2B /* LaunchScreen.storyboard */,
@@ -147,7 +144,6 @@
 			files = (
 				D130811C2397616500732E2B /* GameViewController.swift in Sources */,
 				D18A20F9239762A300760284 /* RubiksCubeNode.swift in Sources */,
-				D18A20FB2398334E00760284 /* RubiksCube.swift in Sources */,
 				D13081182397616500732E2B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

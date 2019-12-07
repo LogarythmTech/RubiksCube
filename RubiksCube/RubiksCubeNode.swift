@@ -137,19 +137,19 @@ class RubiksCubeNode: SCNNode {
 		
 		setup()
 		resetBrick()
-		rotateBrick()
+		shuffelBrick(ani: false)
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	//MARK: - Brick MISC
 	func setup() {
 		for i in 0..<boxs.count {
 			self.boxMats[i] = Material(mats: self.sideColors)
 		}
 	}
-	
 	func resetBrick() {
 		for node in self.childNodes {
 			node.removeFromParentNode()
@@ -205,39 +205,90 @@ class RubiksCubeNode: SCNNode {
 		}
 	}
 	
-	func rotateBrick() {
+	//MARK: - Suffel Brick
+	/**
+	Shuffels the Brick *x* amount of times
+	
+	 - Parameters:
+	     - ani: Ture: Animate the rotation, False: Don't Animage the rotation
+	*/
+	func shuffelBrick(ani: Bool) {
+		shuffelBrick(ani: ani, times: Int.random(in: 30...60))
+	}
+
+	/**
+	Shuffels the Brick *x* amount of times
+	
+	 - Parameters:
+		- ani: Ture: Animate the rotation, False: Don't Animage the rotation
+		- times: The number of times to shuffel
+	*/
+	func shuffelBrick(ani: Bool, times: Int) {
+		if(times == 0) {
+			return
+		}
+		
 		let dir: Int = Int.random(in: 0..<3)
 		let line: Int = Int.random(in: 0..<self.size)
 		
 		switch dir {
 		case 0:
-			rotateX(pos: Bool.random(), line: line)
+			rotateX(ani: ani, pos: Bool.random(), line: line)
 		case 1:
-			rotateY(pos: Bool.random(), line: line)
+			rotateY(ani: ani, pos: Bool.random(), line: line)
 		case 2:
-			rotateZ(pos: Bool.random(), line: line)
+			rotateZ(ani: ani, pos: Bool.random(), line: line)
 		default:
-			rotateZ(pos: false, line: 0)
+			rotateZ(ani: ani, pos: false, line: 0)
 		}
 		
-		runAction(SCNAction.wait(duration: rotationDuration + waitDuration), completionHandler: {
-			self.rotateBrick()
-		})
-	}
-	
-	func rotateX(pos: Bool, line: Int) {
-		for i in 0..<boxs.count {
-			if(getX(i) == line) {
-				let action = SCNAction.rotateBy(x: deg90 * (pos ? 1 : -1), y: 0, z: 0, duration: TimeInterval(rotationDuration))
-				self.boxMats[i].rotateX(pos: pos, temp: self.boxMats[rotateXto(pos: pos, index: i)].mats)
-				self.boxs[i].runAction(action, completionHandler: {
-					self.resetBrick()
-				})
-			}
+		if(ani) {
+			runAction(SCNAction.wait(duration: rotationDuration + waitDuration), completionHandler: {
+				self.shuffelBrick(ani: ani, times: times - 1)
+			})
+		} else {
+			self.shuffelBrick(ani: ani, times: times - 1)
 		}
 	}
 	
-	//This takes in an int [index] and return what index will replace it with
+	//MARK: - Rotate Brick
+	/**
+	Rotates the Brick in the X axis
+	
+	 - Parameters:
+	     - ani: Ture: Animate the rotation, False: Don't Animage the rotation
+	     - pos: Which direction to rotate
+	     - line: Which line / row to rotate, where 0 and *size* - 1 are faces and anything inbetween is middl
+	*/
+	
+	func rotateX(ani: Bool, pos: Bool, line: Int) {
+		for i in 0..<boxs.count {
+			if(getX(i) == line) {
+				self.boxMats[i].rotateX(pos: pos, temp: self.boxMats[rotateXto(pos: pos, index: i)].mats)
+				
+				if(ani) {
+					let action = SCNAction.rotateBy(x: deg90 * (pos ? 1 : -1), y: 0, z: 0, duration: TimeInterval(rotationDuration))
+					
+					self.boxs[i].runAction(action, completionHandler: {
+						self.resetBrick()
+					})
+				}
+			}
+		}
+		
+		if(!ani) {
+			self.resetBrick()
+		}
+	}
+	
+	/**
+	Gets the index of the block that will be in the same position
+	
+	 - Parameters:
+	     - pos: Which direction to rotate
+	     - index: The index of the block
+	- Returns: The index of the block of which will repalace the bock after rotation
+	**/
 	private func rotateXto(pos: Bool, index: Int) -> Int {
 		let x = getX(index) //Stays the same always
 		let y = pos ? (self.size - getY(index) - 1) : getY(index)
@@ -246,19 +297,40 @@ class RubiksCubeNode: SCNNode {
 		return getIndex(x, z, y)
  	}
 	
-	func rotateY(pos: Bool, line: Int) {
+	/**
+	Rotates the Brick in the Y axis
+	
+	 - Parameters:
+	     - ani: Ture: Animate the rotation, False: Don't Animage the rotation
+	     - pos: Which direction to rotate
+	     - line: Which line / row to rotate, where 0 and *size* - 1 are faces and anything inbetween is middl
+	*/
+	func rotateY(ani: Bool, pos: Bool, line: Int) {
 		for i in 0..<boxs.count {
 			if(getY(i) == line) {
-				let action = SCNAction.rotateBy(x: 0, y: deg90 * (pos ? 1 : -1), z: 0, duration: TimeInterval(rotationDuration))
 				self.boxMats[i].rotateY(pos: pos, temp: self.boxMats[rotateYto(pos: pos, index: i)].mats)
-				self.boxs[i].runAction(action, completionHandler: {
-					self.resetBrick()
-				})
+				if(ani) {
+					let action = SCNAction.rotateBy(x: 0, y: deg90 * (pos ? 1 : -1), z: 0, duration: TimeInterval(rotationDuration))
+					self.boxs[i].runAction(action, completionHandler: {
+						self.resetBrick()
+					})
+				}
 			}
+		}
+		
+		if(!ani) {
+			self.resetBrick()
 		}
 	}
 	
-	//This takes in an int [index] and return what index will replace it with
+	/**
+	Gets the index of the block that will be in the same position
+	
+	 - Parameters:
+	     - pos: Which direction to rotate
+	     - index: The index of the block
+	- Returns: The index of the block of which will repalace the bock after rotation
+	*/
 	private func rotateYto(pos: Bool, index: Int) -> Int {
 		let x = pos ? getX(index) : (self.size - getX(index) - 1)
 		let y = getY(index) //Stays the same always
@@ -267,19 +339,40 @@ class RubiksCubeNode: SCNNode {
 		return getIndex(z, y, x)
 	}
 	
-	func rotateZ(pos: Bool, line: Int) {
+	/**
+	Rotates the Brick in the Z axis
+	
+	 - Parameters:
+	     - ani: Ture: Animate the rotation, False: Don't Animage the rotation
+	     - pos: Which direction to rotate
+	     - line: Which line / row to rotate, where 0 and *size* - 1 are faces and anything inbetween is middl
+	*/
+	func rotateZ(ani: Bool, pos: Bool, line: Int) {
 		for i in 0..<boxs.count {
 			if(getZ(i) == line) {
-				let action = SCNAction.rotateBy(x: 0, y: 0, z: deg90 * (pos ? 1 : -1), duration: TimeInterval(rotationDuration))
 				self.boxMats[i].rotateZ(pos: pos, temp: self.boxMats[rotateZto(pos: pos, index: i)].mats)
-				self.boxs[i].runAction(action, completionHandler: {
-					self.resetBrick()
-				})
+				if(ani) {
+					let action = SCNAction.rotateBy(x: 0, y: 0, z: deg90 * (pos ? 1 : -1), duration: TimeInterval(rotationDuration))
+					self.boxs[i].runAction(action, completionHandler: {
+						self.resetBrick()
+					})
+				}
 			}
+		}
+		
+		if(!ani) {
+			self.resetBrick()
 		}
 	}
 	
-	//This takes in an int [index] and return what index will replace it with
+	/**
+	Gets the index of the block that will be in the same position
+	
+	 - Parameters:
+	     - pos: Which direction to rotate
+	     - index: The index of the block
+	- Returns: The index of the block of which will repalace the bock after rotation
+	*/
 	private func rotateZto(pos: Bool, index: Int) -> Int {
 		let x = pos ? (self.size - getX(index) - 1) : getX(index)
 		let y = pos ? getY(index) : (self.size - getY(index) - 1)
@@ -288,7 +381,7 @@ class RubiksCubeNode: SCNNode {
 		return getIndex(y, x, z)
 	}
 	
-	//Getters
+	//MARK: - Getters
 	func getX(_ index: Int) -> Int {
 		return index % self.size
 	}
